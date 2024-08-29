@@ -33,7 +33,13 @@ app.post("/upload", upload.single("file"), (req, res) => {
   }
 
   // Return success response with uploaded file info
-  res.status(200).json({ message: "File uploaded successfully", file: req.file });
+  res
+    .status(200)
+    .json({ message: "File uploaded successfully", file: req.file });
+});
+
+app.get("/", (req, res) => {
+  res.send("ok, server is working");
 });
 
 // Start the server
