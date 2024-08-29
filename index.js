@@ -4,12 +4,15 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const app = express();
-const PORT = 5000;
 
 app.options("*", cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+
+require("dotenv").config();
+
+const port = process.env.PORT;
 
 // Configure multer for file storage
 const storage = multer.diskStorage({
@@ -46,6 +49,6 @@ app.get("/", (req, res) => {
 });
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on ${port}`);
 });
