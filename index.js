@@ -9,7 +9,7 @@ app.options("*", cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static('public'));
+app.use(express.static("public"));
 require("dotenv").config();
 
 const port = process.env.PORT;
@@ -28,6 +28,9 @@ const upload = multer({ storage: storage });
 
 // Create 'uploads' folder if it doesn't exist
 const fs = require("fs");
+if (!fs.existsSync("public")) {
+  fs.mkdirSync("public");
+}
 if (!fs.existsSync("public/uploads")) {
   fs.mkdirSync("public/uploads");
 }
