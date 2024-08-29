@@ -1,11 +1,14 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
+const cors = require("cors");
 const app = express();
 const PORT = 5000;
-const cors = require("cors");
 
 app.options("*", cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(cors());
 
 // Configure multer for file storage
