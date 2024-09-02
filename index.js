@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const multer = require("multer");
-const path = require("path");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
@@ -14,6 +13,14 @@ app.use(express.static("public"));
 require("dotenv").config();
 
 const { uploadPhoto } = require("./controller/userController");
+
+const {
+  addLocation,
+  getLocations,
+  deleteLocation,
+  addClue,
+  getClues,
+} = require("./controller/adminController");
 
 const port = process.env.PORT;
 const MongoURI = process.env.MONGOURI;
@@ -41,6 +48,11 @@ if (!fs.existsSync("public/uploads")) {
 
 // File upload endpoint
 app.post("/upload", upload.single("file"), uploadPhoto);
+app.post("/addLocation", addLocation);
+app.get("/getLocations", getLocations);
+app.get("/getClues", getClues);
+app.post("/deleteLocation", deleteLocation);
+app.post("/addClue", upload.single("file"), addClue);
 
 // Start the server
 app.listen(port, () => {
