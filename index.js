@@ -18,8 +18,14 @@ const {
   addLocation,
   getLocations,
   deleteLocation,
+  getLocationsById,
   addClue,
   getClues,
+  deleteClue,
+  addTeam,
+  getTeams,
+  deleteTeam,
+  saveTeamDetail,
 } = require("./controller/adminController");
 
 const port = process.env.PORT;
@@ -48,11 +54,20 @@ if (!fs.existsSync("public/uploads")) {
 
 // File upload endpoint
 app.post("/upload", upload.single("file"), uploadPhoto);
+
 app.post("/addLocation", addLocation);
 app.get("/getLocations", getLocations);
-app.get("/getClues", getClues);
 app.post("/deleteLocation", deleteLocation);
+app.post("/getLocationsById", getLocationsById);
+
 app.post("/addClue", upload.single("file"), addClue);
+app.get("/getClues", getClues);
+app.post("/deleteClue", deleteClue);
+
+app.post("/addTeam", addTeam);
+app.get("/getTeams", getTeams);
+app.post("/deleteTeam", deleteTeam);
+app.post("/saveTeamDetail", saveTeamDetail);
 
 // Start the server
 app.listen(port, () => {
