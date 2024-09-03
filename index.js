@@ -12,7 +12,12 @@ app.use(cors());
 app.use(express.static("public"));
 require("dotenv").config();
 
-const { uploadPhoto } = require("./controller/userController");
+const {
+  uploadPhoto,
+  login,
+  getLocationById,
+  getCluesById,
+} = require("./controller/userController");
 
 const {
   addLocation,
@@ -52,9 +57,15 @@ if (!fs.existsSync("public/uploads")) {
   fs.mkdirSync("public/uploads");
 }
 
+// User Routes
+app.post("/login", login);
+app.post("/getLocationById", getLocationById);
+app.post("/getCluesById", getCluesById);
+
 // File upload endpoint
 app.post("/upload", upload.single("file"), uploadPhoto);
 
+// Admin Routes
 app.post("/addLocation", addLocation);
 app.get("/getLocations", getLocations);
 app.post("/deleteLocation", deleteLocation);
