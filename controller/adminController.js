@@ -77,16 +77,27 @@ exports.deleteLocation = async (req, res) => {
 };
 
 exports.addClue = async (req, res) => {
-  const filename = req.file.filename;
   const { title, value, description, locationId } = req.body;
   const newLocationId = new ObjectId(locationId);
-  const newClue = new Clue({
-    title,
-    point: value,
-    description,
-    path: filename,
-    locationId: newLocationId,
-  });
+  let newClue = {};
+  if (!req.file) {
+    newClue = new Clue({
+      title,
+      point: value,
+      description,
+      path: "",
+      locationId: newLocationId,
+    });
+  } else {
+    newClue = new Clue({
+      title,
+      point: value,
+      description,
+      path: req.file.filename,
+      locationId: newLocationId,
+    });
+  }
+
   await newClue.save();
   res.send({
     message: "success",
