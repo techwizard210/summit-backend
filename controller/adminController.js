@@ -1,3 +1,7 @@
+const archiver = require("archiver");
+const fs = require("fs");
+const path = require("path");
+
 const { ObjectId } = require("mongodb");
 
 const Location = require("../model/Location");
@@ -241,4 +245,37 @@ exports.getPhotosById = async (req, res) => {
     message: "success",
     photos,
   });
+};
+
+exports.downloadPhoto = async (req, res) => {
+  const locationId = req.query.locationId;
+  const teamId = req.query.teamId;
+  const newLocationId = new ObjectId(locationId);
+  const newTeamId = new ObjectId(teamId);
+
+  const zipFileName = "summit.zip";
+  res.setHeader("Content-Disposition", `attachment; filename=${zipFileName}`);
+  res.setHeader("Content-Type", "application/zip");
+
+  const archive = archiver("zip", {
+    zlib: { level: 9 },
+  });
+
+  archive.pipe(res);
+
+  const photos = await Photo.find({
+    userId: newTeamId,
+    locationId: newLocationId,
+  });
+
+  for (let photo of photos) {
+    const filePath = path.join(__dirname, "../public/uploads", photo.path);
+    if (fs.existsSync(filePath)) {
+      archive.file(filePath, { name: photo.path });
+    } else {
+      console.error(`File not found: ${photo.path}`);
+    }
+  }
+
+  archive.finalize();
 };

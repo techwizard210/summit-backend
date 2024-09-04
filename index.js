@@ -36,6 +36,7 @@ const {
   saveTeamDetail,
   getPhotos,
   getPhotosById,
+  downloadPhoto
 } = require("./controller/adminController");
 
 const port = process.env.PORT;
@@ -90,6 +91,7 @@ app.post("/saveTeamDetail", saveTeamDetail);
 
 app.get("/getPhotos", getPhotos);
 app.post("/getPhotosById", getPhotosById);
+app.get("/downloadPhoto", downloadPhoto);
 
 const runApp = async () => {
   // connect mongodb
