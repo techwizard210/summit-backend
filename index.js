@@ -5,6 +5,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const app = express();
 
+const User = require("./model/User");
+
 app.options("*", cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -20,6 +22,7 @@ const {
 } = require("./controller/userController");
 
 const {
+  adminLogin,
   addLocation,
   getLocations,
   deleteLocation,
@@ -31,10 +34,13 @@ const {
   getTeams,
   deleteTeam,
   saveTeamDetail,
+  getPhotos,
+  getPhotosById,
 } = require("./controller/adminController");
 
 const port = process.env.PORT;
 const MongoURI = process.env.MONGOURI;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Configure multer for file storage
 const storage = multer.diskStorage({
@@ -66,6 +72,8 @@ app.post("/getCluesById", getCluesById);
 app.post("/upload", upload.single("file"), uploadPhoto);
 
 // Admin Routes
+app.post("/adminLogin", adminLogin);
+
 app.post("/addLocation", addLocation);
 app.get("/getLocations", getLocations);
 app.post("/deleteLocation", deleteLocation);
@@ -80,12 +88,27 @@ app.get("/getTeams", getTeams);
 app.post("/deleteTeam", deleteTeam);
 app.post("/saveTeamDetail", saveTeamDetail);
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on ${port}`);
-});
+app.get("/getPhotos", getPhotos);
+app.post("/getPhotosById", getPhotosById);
 
-mongoose
-  .connect(MongoURI)
-  .then(() => console.log("MongoDB connected..."))
-  .catch((err) => console.log(err));
+const runApp = async () => {
+  // connect mongodb
+  await mongoose
+    .connect(MongoURI)
+    .then(() => console.log("MongoDB connected..."))
+    .catch((err) => console.log(err));
+
+  // create admin user
+  const admin = new User({
+    companyName: "admin",
+    password: ADMIN_PASSWORD,
+  });
+  await admin.save();
+
+  // run app
+  app.listen(port, () => {
+    console.log(`Server running on ${port}`);
+  });
+};
+
+runApp();

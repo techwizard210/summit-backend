@@ -3,6 +3,21 @@ const { ObjectId } = require("mongodb");
 const Location = require("../model/Location");
 const Clue = require("../model/Clue");
 const User = require("../model/User");
+const Photo = require("../model/Photo");
+
+exports.adminLogin = async (req, res) => {
+  const { password } = req.body;
+  const admin = await User.findOne({ companyName: "admin" });
+  if (password === admin.password) {
+    res.send({
+      message: "success",
+    });
+  } else {
+    res.send({
+      message: "Wrong credential",
+    });
+  }
+};
 
 exports.addLocation = async (req, res) => {
   const { locationName } = req.body;
@@ -142,7 +157,7 @@ exports.addTeam = async (req, res) => {
 };
 
 exports.getTeams = async (req, res) => {
-  const teams = await User.find({});
+  const teams = await User.find({ companyName: { $ne: "admin" } });
   let newTeams = [];
 
   for (const team of teams) {
@@ -207,5 +222,23 @@ exports.saveTeamDetail = async (req, res) => {
   await team.save();
   res.send({
     message: "success",
+  });
+};
+
+exports.getPhotos = async (req, res) => {};
+
+exports.getPhotosById = async (req, res) => {
+  const { teamId, locationId } = req.body;
+  const newTeamId = new ObjectId(teamId);
+  const newLocationId = new ObjectId(locationId);
+
+  const photos = await Photo.find({
+    userId: newTeamId,
+    locationId: newLocationId,
+  }).populate("clueId");
+
+  res.send({
+    message: "success",
+    photos,
   });
 };
