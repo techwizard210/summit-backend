@@ -27,6 +27,7 @@ const {
   getLocations,
   deleteLocation,
   getLocationsById,
+  getLocationsByKey,
   addClue,
   getClues,
   editClue,
@@ -79,6 +80,7 @@ app.post("/adminLogin", adminLogin);
 
 app.post("/addLocation", addLocation);
 app.get("/getLocations", getLocations);
+app.post("/getLocationsByKey", getLocationsByKey);
 app.post("/deleteLocation", deleteLocation);
 app.post("/getLocationsById", getLocationsById);
 

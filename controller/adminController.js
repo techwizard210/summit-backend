@@ -82,6 +82,17 @@ exports.getLocationsById = async (req, res) => {
   });
 };
 
+exports.getLocationsByKey = async (req, res) => {
+  const { searchKey } = req.body;
+  const locations = await Location.find({
+    name: { $regex: searchKey, $options: "i" },
+  });
+  res.send({
+    message: "success",
+    locations: locations,
+  });
+};
+
 exports.deleteLocation = async (req, res) => {
   const { id } = req.body;
   const newId = new ObjectId(id);
