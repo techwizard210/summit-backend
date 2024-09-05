@@ -223,7 +223,7 @@ exports.deleteClue = async (req, res) => {
   const newId = new ObjectId(id);
   const deletedItem = await Clue.findByIdAndDelete(newId);
   if (deletedItem) {
-    const clues = await Clue.find({});
+    const clues = await Clue.find({}).populate("locationId");
     res.send({
       message: "success",
       clues,
@@ -341,10 +341,44 @@ exports.deleteTeam = async (req, res) => {
   const newId = new ObjectId(id);
   const deletedItem = await User.findByIdAndDelete(newId);
   if (deletedItem) {
-    const users = await User.find({});
+    const teams = await User.find({
+      companyName: { $ne: "admin" },
+    });
+
+    let newTeams = [];
+
+    for (const team of teams) {
+      if (!team.location) {
+        newTeams.push({
+          _id: team._id,
+          companyName: team.companyName,
+          teamNumber: team.teamNumber,
+          location: "",
+        });
+      } else {
+        const locationIds = team.location.split(",");
+        let newLocationIds = [];
+        locationIds.forEach((id) => {
+          const newId = new ObjectId(id);
+          newLocationIds.push(newId);
+        });
+
+        let locationNames = [];
+        for (const id of newLocationIds) {
+          const location = await Location.findOne({ _id: id });
+          locationNames.push(location.name);
+        }
+        newTeams.push({
+          _id: team._id,
+          companyName: team.companyName,
+          teamNumber: team.teamNumber,
+          location: locationNames.join(", "),
+        });
+      }
+    }
     res.send({
       message: "success",
-      users,
+      users: newTeams,
     });
   }
 };
