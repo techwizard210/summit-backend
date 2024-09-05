@@ -183,6 +183,23 @@ exports.getClueById = async (req, res) => {
   });
 };
 
+exports.getCluesByKey = async (req, res) => {
+  const { searchKey } = req.body;
+  const clues = await Clue.find()
+    .populate({
+      path: "locationId",
+      match: {
+        name: { $regex: searchKey, $options: "i" },
+      },
+    })
+    .exec();
+  const filteredClues = clues.filter((clue) => clue.locationId !== null);
+  res.send({
+    message: "success",
+    clues: filteredClues,
+  });
+};
+
 exports.deleteClue = async (req, res) => {
   const { id } = req.body;
   const newId = new ObjectId(id);

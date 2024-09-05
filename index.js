@@ -33,6 +33,7 @@ const {
   getClues,
   editClue,
   getClueById,
+  getCluesByKey,
   deleteClue,
   addTeam,
   getTeams,
@@ -91,6 +92,7 @@ app.get("/getClues", getClues);
 app.post("/deleteClue", deleteClue);
 app.post("/editClue", upload.single("file"), editClue);
 app.post("/getClueById", getClueById);
+app.post("/getCluesByKey", getCluesByKey);
 
 app.post("/addTeam", addTeam);
 app.get("/getTeams", getTeams);
