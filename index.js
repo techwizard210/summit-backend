@@ -29,6 +29,8 @@ const {
   getLocationsById,
   addClue,
   getClues,
+  editClue,
+  getClueById,
   deleteClue,
   addTeam,
   getTeams,
@@ -36,7 +38,7 @@ const {
   saveTeamDetail,
   getPhotos,
   getPhotosById,
-  downloadPhoto
+  downloadPhoto,
 } = require("./controller/adminController");
 
 const port = process.env.PORT;
@@ -83,6 +85,8 @@ app.post("/getLocationsById", getLocationsById);
 app.post("/addClue", upload.single("file"), addClue);
 app.get("/getClues", getClues);
 app.post("/deleteClue", deleteClue);
+app.post("/editClue", upload.single("file"), editClue);
+app.post("/getClueById", getClueById);
 
 app.post("/addTeam", addTeam);
 app.get("/getTeams", getTeams);

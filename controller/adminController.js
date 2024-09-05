@@ -124,11 +124,39 @@ exports.addClue = async (req, res) => {
   });
 };
 
+exports.editClue = async (req, res) => {
+  const { title, value, description, locationId, editId } = req.body;
+  let clue = await Clue.findOne({ _id: editId });
+  clue.title = title;
+  clue.point = value;
+  clue.description = description;
+  if (req.file) {
+    clue.path = req.file.filename;
+  }
+  clue.locationId = locationId;
+  await clue.save();
+  res.send({
+    message: "success",
+  });
+};
+
 exports.getClues = async (req, res) => {
   const clues = await Clue.find({}).populate("locationId");
   res.send({
     message: "success",
     clues,
+  });
+};
+
+exports.getClueById = async (req, res) => {
+  const { clueId } = req.body;
+  const newClueId = new ObjectId(clueId);
+  const clue = await Clue.findOne({ _id: newClueId });
+  const locations = await Location.find({});
+  res.send({
+    message: "success",
+    clue,
+    locations,
   });
 };
 
