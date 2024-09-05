@@ -25,7 +25,6 @@ exports.adminLogin = async (req, res) => {
 
 exports.addLocation = async (req, res) => {
   const { locationName, locationId } = req.body;
-  const newLocationId = new ObjectId(locationId);
   const isExist = await Location.findOne({ name: locationName });
   if (isExist) {
     res.send({ message: "already registered location name" });
@@ -34,16 +33,20 @@ exports.addLocation = async (req, res) => {
       name: locationName,
     });
     await newLocation.save();
-    const clues = await Clue.find({ locationId: newLocationId });
-    for (const clue of clues) {
-      const newClue = new Clue({
-        title: clue.title,
-        point: clue.point,
-        description: clue.description,
-        path: clue.path == undefined ? "" : clue.path,
-        locationId: newLocation._id,
-      });
-      await newClue.save();
+
+    if (locationId != "none") {
+      const newLocationId = new ObjectId(locationId);
+      const clues = await Clue.find({ locationId: newLocationId });
+      for (const clue of clues) {
+        const newClue = new Clue({
+          title: clue.title,
+          point: clue.point,
+          description: clue.description,
+          path: clue.path == undefined ? "" : clue.path,
+          locationId: newLocation._id,
+        });
+        await newClue.save();
+      }
     }
     res.send({
       message: "success",
