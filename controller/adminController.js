@@ -414,9 +414,11 @@ exports.getPhotosById = async (req, res) => {
     locationId: newLocationId,
   }).populate("clueId");
 
+  const filteredPhotos = photos.filter((photo) => photo.clueId !== null);
+
   res.send({
     message: "success",
-    photos,
+    photos: filteredPhotos,
   });
 };
 
