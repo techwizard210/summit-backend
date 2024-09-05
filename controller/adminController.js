@@ -39,6 +39,17 @@ exports.addLocation = async (req, res) => {
   }
 };
 
+exports.editLocation = async (req, res) => {
+  const { locationName, locationId } = req.body;
+  const newLocationId = new ObjectId(locationId);
+  let location = await Location.findOne({ _id: newLocationId });
+  location.name = locationName;
+  await location.save();
+  res.send({
+    message: "success",
+  });
+};
+
 exports.getLocations = async (req, res) => {
   const locations = await Location.find();
   res.send({
@@ -79,6 +90,7 @@ exports.getLocationsById = async (req, res) => {
   res.send({
     message: "success",
     locations: newLocations,
+    team,
   });
 };
 
@@ -252,7 +264,7 @@ exports.deleteTeam = async (req, res) => {
 };
 
 exports.saveTeamDetail = async (req, res) => {
-  const { locations, teamId } = req.body;
+  const { locations, teamId, companyName, teamNumber } = req.body;
   const newTeamId = new ObjectId(teamId);
   let newLocation = [];
   for (const location of locations) {
@@ -262,6 +274,8 @@ exports.saveTeamDetail = async (req, res) => {
   }
   const team = await User.findOne({ _id: newTeamId });
   team.location = newLocation.join(",");
+  team.companyName = companyName;
+  team.teamNumber = teamNumber;
   await team.save();
   res.send({
     message: "success",

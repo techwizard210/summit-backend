@@ -25,6 +25,7 @@ const {
   adminLogin,
   addLocation,
   getLocations,
+  editLocation,
   deleteLocation,
   getLocationsById,
   getLocationsByKey,
@@ -83,6 +84,7 @@ app.get("/getLocations", getLocations);
 app.post("/getLocationsByKey", getLocationsByKey);
 app.post("/deleteLocation", deleteLocation);
 app.post("/getLocationsById", getLocationsById);
+app.post("/editLocation", editLocation);
 
 app.post("/addClue", upload.single("file"), addClue);
 app.get("/getClues", getClues);
