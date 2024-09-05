@@ -229,7 +229,58 @@ exports.addTeam = async (req, res) => {
 };
 
 exports.getTeams = async (req, res) => {
-  const teams = await User.find({ companyName: { $ne: "admin" } });
+  const teams = await User.find({
+    companyName: { $ne: "admin" },
+  });
+  let newTeams = [];
+
+  for (const team of teams) {
+    if (!team.location) {
+      newTeams.push({
+        _id: team._id,
+        companyName: team.companyName,
+        teamNumber: team.teamNumber,
+        location: "",
+      });
+    } else {
+      const locationIds = team.location.split(",");
+      let newLocationIds = [];
+      locationIds.forEach((id) => {
+        const newId = new ObjectId(id);
+        newLocationIds.push(newId);
+      });
+
+      let locationNames = [];
+      for (const id of newLocationIds) {
+        const location = await Location.findOne({ _id: id });
+        locationNames.push(location.name);
+      }
+      newTeams.push({
+        _id: team._id,
+        companyName: team.companyName,
+        teamNumber: team.teamNumber,
+        location: locationNames.join(", "),
+      });
+    }
+  }
+  res.send({
+    message: "success",
+    teams: newTeams,
+  });
+};
+
+exports.getTeamsByKey = async (req, res) => {
+  const { searchKey } = req.body;
+  const teams = await User.find({
+    $and: [
+      {
+        companyName: { $ne: "admin" },
+      },
+      {
+        companyName: { $regex: searchKey, $options: "i" },
+      },
+    ],
+  });
   let newTeams = [];
 
   for (const team of teams) {

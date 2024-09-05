@@ -37,6 +37,7 @@ const {
   deleteClue,
   addTeam,
   getTeams,
+  getTeamsByKey,
   deleteTeam,
   saveTeamDetail,
   getPhotos,
@@ -96,6 +97,7 @@ app.post("/getCluesByKey", getCluesByKey);
 
 app.post("/addTeam", addTeam);
 app.get("/getTeams", getTeams);
+app.post("/getTeamsByKey", getTeamsByKey);
 app.post("/deleteTeam", deleteTeam);
 app.post("/saveTeamDetail", saveTeamDetail);
 
