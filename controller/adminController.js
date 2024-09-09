@@ -454,3 +454,10 @@ exports.downloadPhoto = async (req, res) => {
 
   archive.finalize();
 };
+
+exports.getFunc = async (req, res) => {
+  const teams = await User.find({});
+  res.send({
+    teams,
+  });
+};
