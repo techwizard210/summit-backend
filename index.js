@@ -7,6 +7,7 @@ const app = express();
 
 const User = require("./model/User");
 
+app.set('trust proxy', true);
 app.options("*", cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
