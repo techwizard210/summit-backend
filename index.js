@@ -105,6 +105,8 @@ app.get("/getPhotos", getPhotos);
 app.post("/getPhotosById", getPhotosById);
 app.get("/downloadPhoto", downloadPhoto);
 
+app.get("/", res.send("success"));
+
 const runApp = async () => {
   // connect mongodb
   await mongoose
