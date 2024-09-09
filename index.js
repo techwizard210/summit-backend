@@ -10,7 +10,13 @@ const User = require("./model/User");
 app.options("*", cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://summit-quest.ca", // Frontend domain
+    methods: "GET,POST,PUT,DELETE,OPTIONS",
+    credentials: true, // Allow cookies and authentication
+  })
+);
 app.use(express.static("public"));
 require("dotenv").config();
 
