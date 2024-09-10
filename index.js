@@ -7,17 +7,10 @@ const app = express();
 
 const User = require("./model/User");
 
-app.set('trust proxy', true);
 app.options("*", cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(
-  cors({
-    origin: "https://summit-quest.ca", // Frontend domain
-    methods: "GET,POST,PUT,DELETE,OPTIONS",
-    credentials: true, // Allow cookies and authentication
-  })
-);
+app.use(cors());
 app.use(express.static("public"));
 require("dotenv").config();
 
@@ -112,9 +105,6 @@ app.post("/saveTeamDetail", saveTeamDetail);
 app.get("/getPhotos", getPhotos);
 app.post("/getPhotosById", getPhotosById);
 app.get("/downloadPhoto", downloadPhoto);
-
-app.get("/", (req, res) => res.send("success"));
-app.get("/getFunc", getFunc);
 
 const runApp = async () => {
   // connect mongodb
