@@ -5,6 +5,7 @@ const Clue = require("../model/Clue");
 const { ObjectId } = require("mongodb");
 
 exports.uploadPhoto = async (req, res) => {
+  console.log("upload photo api working");
   if (!req.file) {
     return res.status(400).send("No file uploaded.");
   }
