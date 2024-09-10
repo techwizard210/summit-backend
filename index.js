@@ -43,7 +43,6 @@ const {
   getPhotos,
   getPhotosById,
   downloadPhoto,
-  getFunc,
 } = require("./controller/adminController");
 
 const port = process.env.PORT;
@@ -114,11 +113,14 @@ const runApp = async () => {
     .catch((err) => console.log(err));
 
   // create admin user
-  const admin = new User({
-    companyName: "admin",
-    password: ADMIN_PASSWORD,
-  });
-  await admin.save();
+  const flag = await User.findOne({ companyName: "admin" });
+  if (!flag) {
+    const admin = new User({
+      companyName: "admin",
+      password: ADMIN_PASSWORD,
+    });
+    await admin.save();
+  }
 
   // run app
   app.listen(port, () => {

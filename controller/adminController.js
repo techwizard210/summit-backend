@@ -183,9 +183,10 @@ exports.editClue = async (req, res) => {
 
 exports.getClues = async (req, res) => {
   const clues = await Clue.find({}).populate("locationId");
+  const filteredClues = clues.filter((clue) => clue.locationId !== null);
   res.send({
     message: "success",
-    clues,
+    clues: filteredClues,
   });
 };
 
@@ -271,7 +272,9 @@ exports.getTeams = async (req, res) => {
       let locationNames = [];
       for (const id of newLocationIds) {
         const location = await Location.findOne({ _id: id });
-        locationNames.push(location.name);
+        if (location) {
+          locationNames.push(location.name);
+        }
       }
       newTeams.push({
         _id: team._id,
