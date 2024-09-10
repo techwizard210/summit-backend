@@ -7,7 +7,7 @@ const { ObjectId } = require("mongodb");
 exports.uploadPhoto = async (req, res) => {
   console.log("upload photo api working");
   if (!req.file) {
-    return res.status(400).send("No file uploaded.");
+    return res.send({ message: "No file uploaded." });
   }
   const { clueId, locationId, userId } = req.body;
   const newUserId = new ObjectId(userId);
