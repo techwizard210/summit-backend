@@ -5,7 +5,6 @@ const Clue = require("../model/Clue");
 const { ObjectId } = require("mongodb");
 
 exports.uploadPhoto = async (req, res) => {
-  console.log("upload photo api working");
   if (!req.file) {
     return res.send({ message: "No file uploaded." });
   }
@@ -72,10 +71,11 @@ exports.getLocationById = async (req, res) => {
 };
 
 exports.getCluesById = async (req, res) => {
-  const { locationId, userId } = req.body;
-  const newLocationId = new ObjectId(locationId);
-  const locationName = await Location.findOne({ _id: newLocationId });
+  const { userId } = req.body;
   const newUserId = new ObjectId(userId);
+  const currentUser = await User.findOne({ _id: newUserId });
+  const newLocationId = new ObjectId(currentUser.location);
+  const locationName = await Location.findOne({ _id: newLocationId });
   const clues = await Clue.find({ locationId: newLocationId });
   if (clues) {
     let newClues = [];
